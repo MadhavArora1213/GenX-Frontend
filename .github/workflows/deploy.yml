@@ -1,0 +1,43 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main  # Runs only when code is pushed to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Uses Ubuntu for best performance
+
+    steps:
+      # ✅ Step 1: Checkout Repository
+      - name: 🛠️ Checkout Repository
+        uses: actions/checkout@v3
+
+      # ✅ Step 2: Setup Node.js with Cache (For Faster Installs)
+      - name: 🚀 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Ensure consistent Node.js version
+          cache: npm  # Caches dependencies for faster builds
+
+      # ✅ Step 3: Install Dependencies
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      # ✅ Step 4: Run ESLint for Code Quality
+      - name: 🔍 Run Linting
+        run: npm run lint
+
+      # ✅ Step 5: Run Tests (Ensures Stability)
+      - name: ✅ Run Tests
+        run: npm test
+
+      # ✅ Step 6: Build the Frontend for Production
+      - name: 🏗️ Build Project
+        run: npm run build
+
+      # ✅ Step 7: Deploy to Vercel/Netlify (Replace with your actual deploy command)
+      - name: 🚀 Deploy to Vercel
+        if: success()  # Deploy only if previous steps pass
+        run: curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_rRwebHAn7e7cVawPXnFWLe5AaiHD/DivKv4AFKb # Replace with actual webhook
