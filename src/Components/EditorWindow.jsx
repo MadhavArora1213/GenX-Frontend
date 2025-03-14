@@ -1,48 +1,34 @@
-import React, { useState } from "react";
-import { Resizable } from "re-resizable";
-import CodeEditor from "../Code_Editor/CodeEditor";
+import React from "react";
 import Navbar from "./Navbar";
 import SecondaryNavbar from "./SecondaryNavbar";
-import Sidebar from "./Sidebar";
 import Chat from "./Chat";
+import Sidebar from "./Sidebar";
+import CodeEditor from "../Code_Editor/CodeEditor";
 
-const EditorWindow = () => {
-  const [sidebarWidth, setSidebarWidth] = useState(300);
-  const [rightPanelWidth, setRightPanelWidth] = useState(300);
-
+function EditorWindow() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <SecondaryNavbar />
-      <div className="flex flex-grow">
-        <Resizable
-          defaultSize={{ width: sidebarWidth, height: "100%" }}
-          minWidth={200}
-          maxWidth={600}
-          onResizeStop={(e, direction, ref, d) => {
-            setSidebarWidth(sidebarWidth + d.width);
-          }}
-          className="bg-gray-200"
-        >
-          <Sidebar />
-        </Resizable>
-        <div className="flex-1 flex flex-col">
-          <CodeEditor />
-        </div>
-        <Resizable
-          defaultSize={{ width: rightPanelWidth, height: "100%" }}
-          minWidth={200}
-          maxWidth={600}
-          onResizeStop={(e, direction, ref, d) => {
-            setRightPanelWidth(rightPanelWidth + d.width);
-          }}
-          className="bg-gray-100 border-l"
-        >
-          <Chat />
-        </Resizable>
+    <>
+      <div className="h-screen w-full">
+        <main>
+          <div className="h-1/5 w-full">
+            <nav> <Navbar/> </nav>
+            <nav> <SecondaryNavbar/> </nav>
+          </div>
+          <div className="h-[80%] w-full flex justify-center items-center">
+            <div className="h-[80%] w-[20%]">
+              <Sidebar/>
+            </div>
+            <div className="h-[80%] w-[60%]">
+             <CodeEditor/>
+            </div>
+            <div className="h-[80%] w-[20%]">
+              <Chat/>
+            </div>
+          </div>
+        </main>
       </div>
-    </div>
+    </>
   );
-};
+}
 
 export default EditorWindow;

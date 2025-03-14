@@ -1,93 +1,62 @@
-import { FaGithub, FaGitlab } from "react-icons/fa";
-import { IoIosArrowRoundForward } from "react-icons/io";
+import React from "react";
 
 const Navbar = () => {
   return (
-    <div className="w-full">
-      {/* Primary Navbar */}
-      <nav className="flex items-center justify-between px-6 py-3 shadow-md bg-white">
-        {/* Left Section - Logo & Menu */}
-        <div className="flex items-center space-x-4">
-          <span className="text-xl font-bold">
-            Logo <span className="text-gray-500">GenX</span>
-          </span>
-          <ul className="hidden md:flex space-x-6 text-gray-600 text-sm">
-            <li className="cursor-pointer hover:text-black">File</li>
-            <li className="cursor-pointer hover:text-black">Edit</li>
-            <li className="cursor-pointer hover:text-black">View</li>
-            <li className="cursor-pointer hover:text-black">Run</li>
-            <li className="cursor-pointer hover:text-black">Terminal</li>
-            <li className="cursor-pointer hover:text-black">Help</li>
-          </ul>
+    <nav className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-2">
+      <div className="flex items-center space-x-6">
+        {/* Logo */}
+        <div className="flex items-center">
+          <span className="text-xl font-bold">Logo</span>
+          <span className="ml-2 text-lg">GenX</span>
         </div>
 
-        {/* Middle Section - Buttons */}
-        <div className="flex items-center space-x-3">
-          <button className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+        {/* Navigation Items */}
+        <div className="flex space-x-4">
+          <button className="px-2 py-1 text-sm hover:bg-gray-100 rounded">
+            File
+          </button>
+          <button className="px-2 py-1 text-sm hover:bg-gray-100 rounded">
+            Edit
+          </button>
+          <button className="px-2 py-1 text-sm hover:bg-gray-100 rounded">
+            View
+          </button>
+          <button className="px-2 py-1 text-sm hover:bg-gray-100 rounded">
             Run
           </button>
-          <button className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-            &lt;/&gt; Debug
-          </button>
-          <button className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-            Deploy
-          </button>
-          <input
-            type="text"
-            placeholder="my-genx-project"
-            className="px-3 py-1 border rounded text-gray-600 text-sm"
-          />
-        </div>
-
-        {/* Right Section - AI Assist, Share, and Logins */}
-        <div className="flex items-center space-x-4">
-          <button className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-            AI Assist
-          </button>
-          <button className="px-3 py-1 bg-black text-white rounded flex items-center">
-            Share <IoIosArrowRoundForward className="ml-1" />
-          </button>
-          <button className="flex items-center space-x-1 px-3 py-1 border rounded">
-            <FaGithub /> <span>GitHub Login</span>
-          </button>
-          <button className="flex items-center space-x-1 px-3 py-1 border rounded">
-            <FaGitlab /> <span>GitLab Login</span>
-          </button>
-        </div>
-      </nav>
-
-      {/* Secondary Navbar */}
-      <nav className="flex items-center justify-between px-6 py-2 bg-gray-100 shadow-sm text-sm text-gray-700">
-        {/* Left Section */}
-        <div className="flex items-center space-x-3">
-          <button className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
-            Explorer
-          </button>
-          <button className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
-            Source Control
-          </button>
-          <button className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
-            Extensions
-          </button>
-        </div>
-
-        {/* Right Section */}
-        <div className="flex items-center space-x-3">
-          <button className="px-3 py-1 border border-gray-400 rounded hover:bg-gray-300">
-            Problems
-          </button>
-          <button className="px-3 py-1 border border-gray-400 rounded hover:bg-gray-300">
-            Output
-          </button>
-          <button className="px-3 py-1 border border-gray-400 rounded hover:bg-gray-300">
-            Debug Console
-          </button>
-          <button className="px-3 py-1 border border-gray-400 rounded hover:bg-gray-300">
+          <button className="px-2 py-1 text-sm hover:bg-gray-100 rounded">
             Terminal
           </button>
+          <button className="px-2 py-1 text-sm hover:bg-gray-100 rounded">
+            Help
+          </button>
         </div>
-      </nav>
-    </div>
+      </div>
+
+      {/* Right side actions */}
+      <div className="flex items-center space-x-2">
+        <button className="flex items-center space-x-1 px-3 py-1.5 rounded hover:bg-gray-100">
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+            />
+          </svg>
+          <span>AI Assist</span>
+        </button>
+        <button className="px-3 py-1.5 bg-gray-900 text-white rounded font-medium">
+          Share
+        </button>
+      </div>
+    </nav>
   );
 };
 
