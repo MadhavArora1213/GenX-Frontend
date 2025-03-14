@@ -1,98 +1,66 @@
-import React, { useEffect, useRef, useState } from "react";
-import { EditorState } from "@codemirror/state";
-import { EditorView, keymap } from "@codemirror/view";
-import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import React from "react";
+import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { python } from "@codemirror/lang-python";
-import { cpp } from "@codemirror/lang-cpp";
-import { java } from "@codemirror/lang-java";
-import { oneDark } from "@codemirror/theme-one-dark";
 
-const fileExtensions = {
-  "script.js": javascript(),
-  "app.py": python(),
-  "main.cpp": cpp(),
-  "Program.java": java(),
-};
+function CodeEditor() {
+  const code = `// Welcome to GenX AI-Powered Editor
+function calculateFactorial(n) {
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  return n * calculateFactorial(n - 1);
+}
 
-const CodeEditor = () => {
-  const editorRef = useRef(null);
-  const [editorValue, setEditorValue] = useState("// Start coding...");
-  const [selectedFile, setSelectedFile] = useState("script.js");
+// AI suggestion: Consider adding memoization for better performance
+const result = calculateFactorial(5);
+console.log(\`The factorial of 5 is \${result}\`);
 
-  useEffect(() => {
-    if (!editorRef.current) return;
-
-    const state = EditorState.create({
-      doc: editorValue,
-      extensions: [
-        history(),
-        keymap.of([...defaultKeymap, ...historyKeymap]),
-        fileExtensions[selectedFile] || javascript(),
-        oneDark,
-        EditorView.updateListener.of((update) => {
-          if (update.docChanged) {
-            const newCode = update.state.doc.toString();
-            setEditorValue(newCode);
-          }
-        }),
-      ],
-    });
-
-    const view = new EditorView({
-      state,
-      parent: editorRef.current,
-    });
-
-    return () => view.destroy();
-  }, [selectedFile]);
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(editorValue);
-    alert("✅ Code copied to clipboard!");
-  };
-
-  const handleDownloadCode = () => {
-    const blob = new Blob([editorValue], { type: "text/plain" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = selectedFile;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+// TODO: Add error handling for negative numbers
+`;
 
   return (
-    <div className="vscode-container">
-      {/* Sidebar (Like VS Code) */}
-      <div className="sidebar">
-        <h3>📂 Files</h3>
-        <ul>
-          {Object.keys(fileExtensions).map((file) => (
-            <li
-              key={file}
-              className={selectedFile === file ? "active-file" : ""}
-              onClick={() => setSelectedFile(file)}
-            >
-              {file}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="h-screen w-full p-4 bg-gray-100">
+      <style jsx>{`
+        /* Custom scrollbar styles */
+        .cm-scroller::-webkit-scrollbar {
+          width: 10px;
+          height: 10px;
+        }
+        .cm-scroller::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 5px;
+        }
+        .cm-scroller::-webkit-scrollbar-thumb {
+          background: #888;
+          border-radius: 5px;
+        }
+        .cm-scroller::-webkit-scrollbar-thumb:hover {
+          background: #555;
+        }
+        /* Ensure full height */
+        .cm-editor {
+          height: 100% !important;
+        }
+        .cm-scroller {
+          overflow: auto !important;
+        }
+      `}</style>
 
-      {/* Main Editor Section */}
-      <div className="editor-section">
-        {/* Toolbar */}
-        <div className="editor-toolbar">
-          <button onClick={handleCopyCode}>📋 Copy</button>
-          <button onClick={handleDownloadCode}>📥 Download</button>
-        </div>
-
-        {/* Code Editor */}
-        <div ref={editorRef} className="editor-box" />
+      <div className="h-full w-full border-2 border-gray-300 rounded-lg shadow-lg overflow-hidden">
+        <CodeMirror
+          value={code}
+          height="100%"
+          extensions={[javascript({ jsx: true })]}
+          theme="light"
+          className="h-full"
+          options={{
+            lineNumbers: true,
+            lineWrapping: true,
+          }}
+        />
       </div>
     </div>
   );
-};
+}
 
 export default CodeEditor;

@@ -1,21 +1,27 @@
 import React from "react";
 
-const Sidebar = () => {
+function Sidebar() {
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-bold mb-4">Files</h2>
-      <ul>
-        <li className="mb-2">File 1</li>
-        <li className="mb-2">File 2</li>
-        <li className="mb-2">
-          Folder 1
-          <ul className="ml-4">
-            <li className="mb-2">File 3</li>
-          </ul>
-        </li>
-      </ul>
+    <div
+      className="sidebar h-screen"
+      style={{
+        height: "100%",
+        backgroundColor: "#f5f5f5",
+        borderRight: "1px solid #ddd",
+        overflow: "auto",
+      }}
+    >
+      {/* File explorer and other sidebar content */}
+      <div className="sidebar-section">
+        <h3>Files</h3>
+        <ul style={{ listStyleType: "none", padding: 0 }}>
+          <li>index.js</li>
+          <li>styles.css</li>
+          <li>app.js</li>
+        </ul>
+      </div>
     </div>
   );
-};
+}
 
 export default Sidebar;
