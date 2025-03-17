@@ -18,9 +18,18 @@ function CodeEditor() {
   const fetchFileContent = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/github/repos/${owner}/${repo}/contents/${filePath}`
+        `http://localhost:3000/api/github/repos/${owner}/${repo}/contents/${filePath}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${document.cookie
+              .split('; ')
+              .find(row => row.startsWith('githubAccessToken='))
+              ?.split('=')[1]}`,
+          },
+        }
       );
-      const content = atob(response.data.content);
+      const content = response.data.content ? atob(response.data.content) : "";
       setFileContent(content);
     } catch (error) {
       console.error("Error fetching file content:", error);
