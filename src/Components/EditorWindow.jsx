@@ -1,31 +1,32 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import SecondaryNavbar from "./SecondaryNavbar";
 import Chat from "./Chat";
 import Sidebar from "./Sidebar";
 import CodeEditor from "../Code_Editor/CodeEditor";
-import { Resizable } from 're-resizable';
-
+import { Resizable } from "re-resizable";
+import { useLocation } from "react-router-dom";
 
 function EditorWindow() {
-      const [leftWidth, setLeftWidth] = useState(250);
+  const [leftWidth, setLeftWidth] = useState(250);
   const [rightWidth, setRightWidth] = useState(400);
+  const location = useLocation();
+  const { owner, repo, filePath } = location.state;
+
   return (
     <>
       <div className="h-screen w-full">
         <main>
           <div className="h-1/5 w-full">
             <nav>
-              {" "}
-              <Navbar />{" "}
+              <Navbar />
             </nav>
             <nav>
-              {" "}
-              <SecondaryNavbar />{" "}
+              <SecondaryNavbar />
             </nav>
           </div>
           <div className="h-[80%] w-full flex justify-center items-center">
-            <div className="">
+            <div>
               <Resizable
                 size={{ width: leftWidth, height: "100%" }}
                 onResizeStop={(e, direction, ref, d) => {
@@ -35,7 +36,7 @@ function EditorWindow() {
                 minWidth={180}
                 maxWidth={400}
               >
-                <Sidebar />
+                <Sidebar owner={owner} repo={repo} />
               </Resizable>
             </div>
             <div className="h-[80%] w-[60%]">
@@ -62,6 +63,3 @@ function EditorWindow() {
 }
 
 export default EditorWindow;
-
-
-

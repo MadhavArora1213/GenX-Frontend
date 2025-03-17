@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -6,6 +8,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [githubRepos, setGithubRepos] = useState([]);
   const [gitlabRepos, setGitlabRepos] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:3000/auth/github/success", {
@@ -47,21 +50,31 @@ const Home = () => {
   const fetchRepos = (url, setRepos) => {
     fetch(url, {
       credentials: "include",
+      headers: {
+        Accept: "application/json",
+      },
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Failed to fetch user repos");
+          return res.text().then((text) => {
+            console.error("Error response:", text);
+            throw new Error(`Failed to fetch user repos: ${text}`);
+          });
         }
         return res.json();
       })
       .then((data) => {
         console.log("User Repos:", data);
-        setRepos(data);
+        setRepos(Array.isArray(data) ? data : []);
       })
       .catch((err) => {
         console.error("Error fetching user repos:", err);
-        setError("Failed to load user repos");
+        setError("Failed to load user repos: " + err.message);
       });
+  };
+
+  const handleRepoClick = (owner, repo) => {
+    navigate("/code_editor", { state: { owner, repo } });
   };
 
   return (
@@ -105,16 +118,12 @@ const Home = () => {
                 {githubRepos.map((repo) => (
                   <div
                     key={repo.id}
-                    className="bg-gray-700 p-4 rounded-lg shadow-lg"
+                    className="bg-gray-700 p-4 rounded-lg shadow-lg cursor-pointer"
+                    onClick={() => handleRepoClick(repo.owner.login, repo.name)}
                   >
-                    <a
-                      href={repo.html_url}
-                      className="text-blue-400"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <h4 className="text-lg font-semibold">{repo.name}</h4>
-                    </a>
+                    <h4 className="text-lg font-semibold text-blue-400">
+                      {repo.name}
+                    </h4>
                     <p className="text-gray-300">{repo.description}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       <strong>Stars:</strong> {repo.stargazers_count} |{" "}
@@ -139,16 +148,17 @@ const Home = () => {
                 {gitlabRepos.map((repo) => (
                   <div
                     key={repo.id}
-                    className="bg-gray-700 p-4 rounded-lg shadow-lg"
+                    className="bg-gray-700 p-4 rounded-lg shadow-lg cursor-pointer"
+                    onClick={() =>
+                      handleRepoClick(
+                        repo.owner?.name || repo.namespace?.name,
+                        repo.name
+                      )
+                    }
                   >
-                    <a
-                      href={repo.web_url}
-                      className="text-blue-400"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <h4 className="text-lg font-semibold">{repo.name}</h4>
-                    </a>
+                    <h4 className="text-lg font-semibold text-blue-400">
+                      {repo.name}
+                    </h4>
                     <p className="text-gray-300">{repo.description}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       <strong>Stars:</strong> {repo.star_count} |{" "}
