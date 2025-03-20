@@ -7,7 +7,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [githubRepos, setGithubRepos] = useState([]);
-  const [gitlabRepos, setGitlabRepos] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const Home = () => {
       .then((data) => {
         console.log("User Data:", data);
         setUser(data);
-        fetchUserRepos(data.provider);
+        fetchUserRepos();
         setLoading(false);
       })
       .catch((err) => {
@@ -33,18 +32,9 @@ const Home = () => {
       });
   }, []);
 
-  const fetchUserRepos = (provider) => {
+  const fetchUserRepos = () => {
     const githubUrl = "http://localhost:3000/auth/github/repos";
-    const gitlabUrl = "http://localhost:3000/auth/gitlab/repos";
-
-    if (provider === "github") {
-      fetchRepos(githubUrl, setGithubRepos);
-    } else if (provider === "gitlab") {
-      fetchRepos(gitlabUrl, setGitlabRepos);
-    } else {
-      fetchRepos(githubUrl, setGithubRepos);
-      fetchRepos(gitlabUrl, setGitlabRepos);
-    }
+    fetchRepos(githubUrl, setGithubRepos);
   };
 
   const fetchRepos = (url, setRepos) => {
@@ -73,8 +63,51 @@ const Home = () => {
       });
   };
 
-  const handleRepoClick = (owner, repo) => {
-    navigate("/code_editor", { state: { owner, repo } });
+  const handleRepoClick = async (owner, repo) => {
+    console.log(`Handling GitHub repository click:`, { owner, repo });
+    
+    // Make sure we have valid owner and repo names before navigating
+    if (owner && repo) {
+      try {
+        // Extract owner name from different possible formats
+        let ownerName = owner;
+        
+        // Handle different owner object formats
+        if (typeof owner === 'object') {
+          ownerName = owner.login || owner.name || owner.username || '';
+        } else if (typeof owner === 'string' && owner.includes('/')) {
+          // Handle case where owner might be in "username/repo" format
+          ownerName = owner.split('/')[0];
+        }
+        
+        // Log information for debugging
+        console.log("Navigating to repository:", {
+          originalOwner: owner,
+          extractedOwner: ownerName,
+          repo: repo
+        });
+        
+        if (!ownerName) {
+          console.error("Cannot determine repository owner", { owner });
+          setError("Cannot open repository: unable to determine owner");
+          return;
+        }
+        
+        navigate("/code_editor", { 
+          state: { 
+            owner: ownerName, 
+            repo: repo,
+            provider: "github"
+          } 
+        });
+      } catch (error) {
+        console.error("Error navigating to repository:", error);
+        setError(`Error opening repository: ${error.message}`);
+      }
+    } else {
+      console.error("Invalid repository data", {owner, repo});
+      setError("Cannot open repository: missing required information");
+    }
   };
 
   return (
@@ -91,7 +124,7 @@ const Home = () => {
             Hello, {user.name}!
           </h2>
           <p className="text-gray-300">
-            Your {user.provider === "github" ? "GitHub" : "GitLab"} ID:{" "}
+            Your GitHub ID:{" "}
             <span className="text-yellow-400">{user.id}</span>
           </p>
           <p className="text-gray-300">
@@ -99,11 +132,7 @@ const Home = () => {
           </p>
 
           <a
-            href={
-              user.provider === "github"
-                ? "/auth/github/signout"
-                : "/auth/gitlab/signout"
-            }
+            href="/auth/github/signout"
             className="mt-4 inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-medium transition duration-300"
           >
             Logout
@@ -119,7 +148,10 @@ const Home = () => {
                   <div
                     key={repo.id}
                     className="bg-gray-700 p-4 rounded-lg shadow-lg cursor-pointer"
-                    onClick={() => handleRepoClick(repo.owner.login, repo.name)}
+                    onClick={() => {
+                      console.log("GitHub repository clicked:", repo);
+                      handleRepoClick(repo.owner?.login || repo.full_name?.split('/')[0], repo.name);
+                    }}
                   >
                     <h4 className="text-lg font-semibold text-blue-400">
                       {repo.name}
@@ -135,41 +167,6 @@ const Home = () => {
             ) : (
               <p className="text-gray-300 mt-4">
                 No GitHub repositories found.
-              </p>
-            )}
-          </div>
-
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-blue-400">
-              Your GitLab Repositories:
-            </h3>
-            {gitlabRepos.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                {gitlabRepos.map((repo) => (
-                  <div
-                    key={repo.id}
-                    className="bg-gray-700 p-4 rounded-lg shadow-lg cursor-pointer"
-                    onClick={() =>
-                      handleRepoClick(
-                        repo.owner?.name || repo.namespace?.name,
-                        repo.name
-                      )
-                    }
-                  >
-                    <h4 className="text-lg font-semibold text-blue-400">
-                      {repo.name}
-                    </h4>
-                    <p className="text-gray-300">{repo.description}</p>
-                    <p className="text-gray-400 text-sm mt-2">
-                      <strong>Stars:</strong> {repo.star_count} |{" "}
-                      <strong>Forks:</strong> {repo.forks_count}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-300 mt-4">
-                No GitLab repositories found.
               </p>
             )}
           </div>

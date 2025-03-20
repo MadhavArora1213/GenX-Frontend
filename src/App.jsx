@@ -16,10 +16,6 @@ function App() {
           path="/auth/github/signout"
           element={<SignOut provider="github" />}
         />
-        <Route
-          path="/auth/gitlab/signout"
-          element={<SignOut provider="gitlab" />}
-        />
         <Route path="/code_editor" element={<EditorWindow />} />
       </Routes>
     </Router>

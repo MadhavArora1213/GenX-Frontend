@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SignOut = ({ provider }) => {
+const SignOut = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const signOutUrl = `http://localhost:3000/auth/${provider}/signout`;
+    const signOutUrl = `http://localhost:3000/auth/github/signout`;
     fetch(signOutUrl, {
       method: "GET",
       credentials: "include",
@@ -20,7 +20,7 @@ const SignOut = ({ provider }) => {
       .catch((error) => {
         console.error("Error signing out:", error);
       });
-  }, [provider, navigate]);
+  }, [navigate]);
 
   return <p>Signing out...</p>;
 };
