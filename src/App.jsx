@@ -1,15 +1,18 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./Home";
-import AuthSuccess from "./AuthSuccess";
-import AuthError from "./AuthError";
-import SignOut from "./SignOut";
-import EditorWindow from "./Components/EditorWindow";
+import Home from "./Landing_Page/Home";
+import AuthSuccess from "./Auth/AuthSuccess";
+import AuthError from "./Auth/AuthError";
+import SignOut from "./Auth/SignOut";
+import EditorWindow from "./Code_Editor/EditorWindow";
+import Login from "./Auth/Login";
+
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/auth/github/success" element={<AuthSuccess />} />
         <Route path="/auth/github/error" element={<AuthError />} />
         <Route

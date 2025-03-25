@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import SecondaryNavbar from "./SecondaryNavbar";
-import Chat from "./Chat";
-import Sidebar from "./Sidebar";
-import CodeEditor from "../Code_Editor/CodeEditor";
+import Navbar from "../Components/Navbar";
+import SecondaryNavbar from "../Components/SecondaryNavbar";
+import Chat from "../Components/Chat";
+import Sidebar from "../Components/Sidebar";
+import CodeEditor from "./CodeEditor";
 import { Resizable } from "re-resizable";
 import { useLocation } from "react-router-dom";
 
@@ -15,6 +15,7 @@ function EditorWindow() {
   const [leftVisible, setLeftVisible] = useState(true);
   const [rightVisible, setRightVisible] = useState(true);
   const location = useLocation();
+  // Add default empty object to prevent destructuring errors
   const { owner, repo, filePath } = location.state || {};
 
   // Handle responsive behavior

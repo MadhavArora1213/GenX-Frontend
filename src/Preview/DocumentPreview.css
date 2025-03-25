@@ -1,0 +1,45 @@
+/* Reduced CSS file - using Tailwind for most styling */
+
+/* Code styling that can't easily be done with Tailwind */
+.code-preview {
+  width: 100%;
+  overflow: auto;
+  background-color: #f5f5f5;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.language-preview {
+  margin: 0 !important;
+  padding: 15px !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Scrollbar styling */
+.code-preview::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.code-preview::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.code-preview::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.code-preview::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* File type colors */
+.file-icon.pdf { color: #f40f02; }
+.file-icon.word { color: #2b579a; }
+.file-icon.excel { color: #217346; }
+.file-icon.powerpoint { color: #d24726; }
+.file-icon.text { color: #5c5c5c; }
+.file-icon.code { color: #6e6e6e; }

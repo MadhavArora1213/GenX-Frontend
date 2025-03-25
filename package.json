@@ -27,6 +27,8 @@
     "@uiw/react-codemirror": "^4.23.10",
     "axios": "^1.8.2",
     "codemirror": "^6.0.1",
+    "pdfjs-dist": "^5.0.375",
+    "prismjs": "^1.30.0",
     "re-resizable": "^6.11.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
